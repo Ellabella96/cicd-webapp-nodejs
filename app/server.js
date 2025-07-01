@@ -41,20 +41,25 @@ app.use('*', (req, res) => {
 });
 
 // Error handler
+// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
+  // eslint-disable-next-line no-console
   console.error(err.stack);
   res.status(500).json({ error: 'Something went wrong!' });
 });
 
 // Start server
 const server = app.listen(PORT, '0.0.0.0', () => {
+  // eslint-disable-next-line no-console
   console.log(`Server running on port ${PORT}`);
 });
 
 // Graceful shutdown
 process.on('SIGTERM', () => {
+  // eslint-disable-next-line no-console
   console.log('SIGTERM received, shutting down gracefully');
   server.close(() => {
+    // eslint-disable-next-line no-console
     console.log('Process terminated');
   });
 });

@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
     service: 'cicd-webapp-nodejs',
     version: process.env.npm_package_version || '1.0.0'
   };
-  
+
   res.status(200).json(healthCheck);
 });
 
