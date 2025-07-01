@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevOps WebApp</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 CI/CD WebApp</h1>
+            <p>A Node.js web application with CI/CD pipeline and monitoring</p>
+        </header>
+        
+        <main>
+            <div class="card">
+                <h2>Application Status</h2>
+                <div id="status" class="status">
+                    <span class="loading">Checking...</span>
+                </div>
+                <button onclick="checkHealth()">Check Health</button>
+            </div>
+            
+            <div class="card">
+                <h2>Features</h2>
+                <ul>
+                    <li>✅ Dockerized application</li>
+                    <li>✅ Health check endpoints</li>
+                    <li>✅ Prometheus metrics</li>
+                    <li>✅ CI/CD pipeline</li>
+                    <li>✅ Infrastructure as Code</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h2>Quick Links</h2>
+                <div class="links">
+                    <a href="/health" target="_blank">Health Check</a>
+                    <a href="/metrics" target="_blank">Metrics</a>
+                    <a href="https://github.com/ellabella96/cicd-webapp-nodejs" target="_blank">GitHub</a>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>Built with ❤️ for CI/CD and DevOps</p>
+        </footer>
+    </div>
+
+    <script>
+        async function checkHealth() {
+            try {
+                const response = await fetch('/health');
+                const data = await response.json();
+                const statusDiv = document.getElementById('status');
+                
+                if (data.status === 'healthy') {
+                    statusDiv.innerHTML = `
+                        <span class="healthy">✅ Healthy</span>
+                        <small>Uptime: ${Math.floor(data.uptime / 1000)}s</small>
+                    `;
+                } else {
+                    statusDiv.innerHTML = '<span class="unhealthy">❌ Unhealthy</span>';
+                }
+            } catch (error) {
+                document.getElementById('status').innerHTML = 
+                    '<span class="error">❌ Error checking health</span>';
+            }
+        }
+        
+        // Check health on page load
+        checkHealth();
+        
+        // Auto-refresh every 30 seconds
+        setInterval(checkHealth, 30000);
+    </script>
+</body>
+</html>
