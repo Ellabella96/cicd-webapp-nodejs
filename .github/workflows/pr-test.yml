@@ -2,7 +2,7 @@ name: Pull Request Tests
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [ main, develop ]
 
 jobs:
   test:
@@ -64,4 +64,3 @@ jobs:
             repo: context.repo.repo,
             body: '✅ All tests passed! Ready for review.'
           })
-          
