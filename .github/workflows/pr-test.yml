@@ -1,0 +1,67 @@
+name: Pull Request Tests
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Test Pull Request
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: app/package-lock.json
+        
+    - name: Install dependencies
+      run: |
+        cd app
+        npm ci
+        
+    - name: Run linting
+      run: |
+        cd app
+        npm run lint
+        
+    - name: Run tests
+      run: |
+        cd app
+        npm test
+        
+    - name: Docker build test
+      run: |
+        docker build -t test-build .
+        
+    - name: Test container
+      run: |
+        # Start container
+        docker run -d --name test-container -p 3000:3000 test-build
+        
+        # Wait for startup
+        sleep 10
+        
+        # Test health endpoint
+        curl -f http://localhost:3000/health || exit 1
+        
+        # Cleanup
+        docker stop test-container
+        docker rm test-container
+        
+    - name: Comment PR
+      uses: actions/github-script@v6
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: '✅ All tests passed! Ready for review.'
+          })
+          
