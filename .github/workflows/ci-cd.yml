@@ -39,7 +39,7 @@ jobs:
     - name: Run tests
       run: |
         cd app
-        npm test
+        npm test:ci
         
     - name: Run security audit
       run: |

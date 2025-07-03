@@ -2,22 +2,11 @@ const request = require('supertest');
 const app = require('../server');
 
 describe('Application Tests', () => {
-  let server;
-
-  beforeAll(() => {
-    // Start server for testing
-    server = app.listen(0); // Use random port for testing
-  });
-
-  afterAll(async () => {
-    // Close server after tests
-    await new Promise(resolve => server.close(resolve));
-  });
-
   describe('GET /', () => {
     it('should return the main page', async () => {
       const response = await request(app).get('/');
       expect(response.status).toBe(200);
+      expect(response.text).toContain('CI/CD WebApp');
     });
   });
 
@@ -28,6 +17,8 @@ describe('Application Tests', () => {
       expect(response.body).toHaveProperty('status', 'healthy');
       expect(response.body).toHaveProperty('timestamp');
       expect(response.body).toHaveProperty('uptime');
+      expect(response.body).toHaveProperty('service', 'cicd-webapp-nodejs');
+      expect(response.body).toHaveProperty('version');
     });
   });
 
@@ -52,6 +43,8 @@ describe('Application Tests', () => {
       const response = await request(app).get('/metrics');
       expect(response.status).toBe(200);
       expect(response.text).toContain('http_requests_total');
+      expect(response.text).toContain('http_request_duration_seconds');
+      expect(response.header['content-type']).toMatch(/text\/plain/);
     });
   });
 
@@ -60,6 +53,13 @@ describe('Application Tests', () => {
       const response = await request(app).get('/nonexistent');
       expect(response.status).toBe(404);
       expect(response.body).toHaveProperty('error', 'Route not found');
+    });
+  });
+
+  describe('Error handling', () => {
+    it('should handle requests gracefully', async () => {
+      const response = await request(app).get('/health');
+      expect(response.status).not.toBe(500);
     });
   });
 });
