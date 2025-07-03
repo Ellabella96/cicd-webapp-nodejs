@@ -33,7 +33,7 @@ jobs:
     - name: Run tests
       run: |
         cd app
-        npm test
+        npm run test:ci
         
     - name: Docker build test
       run: |
