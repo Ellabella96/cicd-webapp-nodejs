@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1751507894482" clover="3.2.0">
-  <project timestamp="1751507894482" name="All files">
+<coverage generated="1751508295006" clover="3.2.0">
+  <project timestamp="1751508295006" name="All files">
     <metrics statements="71" coveredstatements="60" conditionals="8" coveredconditionals="6" methods="12" coveredmethods="7" elements="91" coveredelements="73" complexity="0" loc="71" ncloc="71" packages="2" files="4" classes="4"/>
     <package name="app">
       <metrics statements="34" coveredstatements="24" conditionals="4" coveredconditionals="3" methods="6" coveredmethods="1"/>
@@ -32,17 +32,17 @@
         <line num="35" count="0" type="stmt"/>
         <line num="39" count="3" type="stmt"/>
         <line num="40" count="1" type="stmt"/>
-        <line num="44" count="3" type="stmt"/>
-        <line num="46" count="0" type="stmt"/>
+        <line num="45" count="3" type="stmt"/>
         <line num="47" count="0" type="stmt"/>
-        <line num="51" count="3" type="cond" truecount="1" falsecount="1"/>
-        <line num="52" count="0" type="stmt"/>
-        <line num="54" count="0" type="stmt"/>
-        <line num="58" count="0" type="stmt"/>
-        <line num="60" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="52" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
         <line num="61" count="0" type="stmt"/>
-        <line num="63" count="0" type="stmt"/>
-        <line num="68" count="3" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="69" count="3" type="stmt"/>
       </file>
     </package>
     <package name="app.routes">
