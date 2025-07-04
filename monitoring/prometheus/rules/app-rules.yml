@@ -1,0 +1,65 @@
+groups:
+  - name: cicd-webapp-nodejs.rules
+    rules:
+      # High error rate alert
+      - alert: HighErrorRate
+        expr: |
+          (
+            rate(http_requests_total{job="cicd-webapp-nodejs",status_code=~"5.."}[5m]) /
+            rate(http_requests_total{job="cicd-webapp-nodejs"}[5m])
+          ) > 0.1
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High error rate detected"
+          description: "Error rate is {{ $value | humanizePercentage }} for {{ $labels.job }}"
+
+      # High response time alert
+      - alert: HighResponseTime
+        expr: |
+          histogram_quantile(0.95, 
+            rate(http_request_duration_seconds_bucket{job="cicd-webapp-nodejs"}[5m])
+          ) > 0.5
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High response time detected"
+          description: "95th percentile response time is {{ $value }}s for {{ $labels.job }}"
+
+      # Application down alert
+      - alert: AppDown
+        expr: up{job="cicd-webapp-nodejs"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Application is down"
+          description: "The application {{ $labels.job }} has been down for more than 1 minute"
+
+      # High memory usage alert
+      - alert: HighMemoryUsage
+        expr: |
+          (
+            container_memory_usage_bytes{name="cicd-webapp-nodejs"} /
+            container_spec_memory_limit_bytes{name="cicd-webapp-nodejs"}
+          ) > 0.8
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage"
+          description: "Memory usage is {{ $value | humanizePercentage }} for {{ $labels.name }}"
+
+      # High CPU usage alert
+      - alert: HighCPUUsage
+        expr: |
+          rate(container_cpu_usage_seconds_total{name="cicd-webapp-nodejs"}[5m]) > 0.8
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU usage"
+          description: "CPU usage is {{ $value | humanizePercentage }} for {{ $labels.name }}"
+          

@@ -1,0 +1,133 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "CI/CD WebApp Node.js Dashboard",
+    "tags": ["nodejs", "cicd", "webapp"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Request Rate",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(http_requests_total{job=\"cicd-webapp-nodejs\"}[5m])",
+            "legendFormat": "{{method}} {{route}}"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Requests/sec"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}
+      },
+      {
+        "id": 2,
+        "title": "Response Time (95th percentile)",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job=\"cicd-webapp-nodejs\"}[5m]))",
+            "legendFormat": "95th percentile"
+          },
+          {
+            "expr": "histogram_quantile(0.50, rate(http_request_duration_seconds_bucket{job=\"cicd-webapp-nodejs\"}[5m]))",
+            "legendFormat": "50th percentile"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Seconds"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0}
+      },
+      {
+        "id": 3,
+        "title": "Error Rate",
+        "type": "singlestat",
+        "targets": [
+          {
+            "expr": "(rate(http_requests_total{job=\"cicd-webapp-nodejs\",status_code=~\"5..\"}[5m]) / rate(http_requests_total{job=\"cicd-webapp-nodejs\"}[5m])) * 100",
+            "legendFormat": "Error Rate %"
+          }
+        ],
+        "valueName": "current",
+        "format": "percent",
+        "thresholds": "1,5",
+        "colorBackground": true,
+        "gridPos": {"h": 4, "w": 6, "x": 0, "y": 8}
+      },
+      {
+        "id": 4,
+        "title": "Total Requests",
+        "type": "singlestat",
+        "targets": [
+          {
+            "expr": "sum(http_requests_total{job=\"cicd-webapp-nodejs\"})",
+            "legendFormat": "Total Requests"
+          }
+        ],
+        "valueName": "current",
+        "format": "short",
+        "gridPos": {"h": 4, "w": 6, "x": 6, "y": 8}
+      },
+      {
+        "id": 5,
+        "title": "Memory Usage",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "process_resident_memory_bytes{job=\"cicd-webapp-nodejs\"}",
+            "legendFormat": "Memory Usage"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Bytes"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8}
+      },
+      {
+        "id": 6,
+        "title": "CPU Usage",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(process_cpu_user_seconds_total{job=\"cicd-webapp-nodejs\"}[5m])",
+            "legendFormat": "CPU User"
+          },
+          {
+            "expr": "rate(process_cpu_system_seconds_total{job=\"cicd-webapp-nodejs\"}[5m])",
+            "legendFormat": "CPU System"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "CPU Seconds/sec"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16}
+      },
+      {
+        "id": 7,
+        "title": "Active Connections",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "nodejs_active_handles{job=\"cicd-webapp-nodejs\"}",
+            "legendFormat": "Active Handles"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16}
+      }
+    ],
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "refresh": "5s"
+  }
+}
